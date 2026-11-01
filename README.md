@@ -101,6 +101,12 @@ AI_LOG.md             Registro de uso de IA
 - `apresentacao.html` — slides.
 - `AI_LOG.md` — registro de uso de IA.
 
+Para gerar o zip sem a chave:
+
+```bash
+zip -r ecomail-sprint2.zip index.html styles.css js assets README.md AI_LOG.md apresentacao.html -x "js/env.js"
+```
+
 ## Autoria
 
 Trabalho individual de **Vitor Mazzonetto**.
