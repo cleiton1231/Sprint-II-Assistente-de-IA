@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Assistente de IA do projeto EcoMail — Sprint II"
+    />
+    <title>EcoMail — Assistente de IA</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="cabecalho">
+      <div>
+        <p class="etiqueta">Sprint II · Assistente de IA</p>
+        <h1>EcoMail</h1>
+        <p class="subtitulo">
+          Tire dúvidas sobre o sistema EcoMail, criado na Sprint I. O assistente
+          responde apenas sobre este projeto.
+        </p>
+      </div>
+      <button id="btnNovaConversa" class="botao secundario" type="button">
+        Nova conversa
+      </button>
+    </header>
+
+    <main class="layout">
+      <section class="coluna-assistente" aria-labelledby="titulo-assistente">
+        <h2 id="titulo-assistente" class="titulo-secao">Assistente</h2>
+
+        <div class="cartao configuracao">
+          <div class="campo">
+            <label for="selectProvedor">Provedor de IA</label>
+            <select id="selectProvedor"></select>
+          </div>
+
+          <div class="campo">
+            <label for="selectModelo">Modelo</label>
+            <select id="selectModelo"></select>
+          </div>
+
+          <div class="campo campo-largo">
+            <label for="inputChave">Chave da API</label>
+            <div class="linha-chave">
+              <input
+                id="inputChave"
+                type="password"
+                placeholder="Cole sua chave aqui"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button id="btnSalvarChave" class="botao secundario" type="button">
+                Salvar
+              </button>
+            </div>
+            <p id="ajudaChave" class="ajuda"></p>
+          </div>
+        </div>
+
+        <form id="formPergunta" class="cartao">
+          <label for="inputPergunta">Sua pergunta</label>
+          <textarea
+            id="inputPergunta"
+            rows="4"
+            maxlength="500"
+            placeholder="Ex.: Quem é o público-alvo? Como funciona a classificação? O sistema inventa prazos?"
+          ></textarea>
+          <div class="acoes-formulario">
+            <span id="contadorCaracteres" class="contador">0/500</span>
+            <button id="btnEnviar" class="botao" type="submit">
+              Perguntar
+            </button>
+          </div>
+        </form>
+
+        <p id="status" class="status info" role="status" aria-live="polite"></p>
+
+        <article id="resposta" class="cartao resposta" hidden>
+          <h2>Resposta do assistente</h2>
+          <p id="textoResposta"></p>
+        </article>
+
+        <section class="cartao historico" aria-labelledby="titulo-historico">
+          <div class="titulo-com-acao">
+            <h2 id="titulo-historico">Histórico da sessão</h2>
+            <span class="legenda">mais recente primeiro</span>
+          </div>
+          <div id="listaHistorico">
+            <p class="vazio">Nenhuma pergunta ainda.</p>
+          </div>
+        </section>
+      </section>
+
+      <aside class="coluna-metricas" aria-labelledby="titulo-metricas">
+        <div class="titulo-painel">
+          <h2 id="titulo-metricas">Painel de métricas</h2>
+          <p id="resumoSessao" class="resumo-sessao">
+            Sessão: 0 perguntas · 0 tokens reais
+          </p>
+        </div>
+
+        <div id="painelMetricas" class="grade-metricas">
+          <p class="vazio">As métricas aparecem após a primeira resposta.</p>
+        </div>
+
+        <p class="nota">
+          Métricas calculadas em JavaScript puro a partir do texto da pergunta e
+          da resposta. M1 usa o campo <code>usage</code> da API.
+        </p>
+      </aside>
+    </main>
+
+    <footer class="rodape">
+      <p>
+        Trabalho acadêmico — Sprint II. A chave da API não é gravada no código e
+        fica apenas nesta aba do navegador.
+      </p>
+    </footer>
+
+    <script src="js/env.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

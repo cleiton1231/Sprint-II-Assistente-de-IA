@@ -1,0 +1,17 @@
+# Chaves e segredos
+.env
+.env.*
+*.key
+*.pem
+*.p12
+js/env.js
+js/env.local.js
+
+# Dependências e artefatos locais (não usados pela aplicação)
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Pacotes de entrega
+entrega.zip
+*.zip
