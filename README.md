@@ -76,6 +76,7 @@ Também há suporte a OpenAI (`gpt-4o-mini`) e Groq
 index.html            Página, formulário, resposta, histórico e painel
 styles.css            Estilos e layout responsivo
 apresentacao.html     Slides navegáveis (setas do teclado)
+apresentacao.pdf      Slides em PDF (8 páginas, para entrega)
 assets/               Captura de tela usada nos slides
 js/config.js          Contexto, prompt, termos e provedores
 js/api.js             Chamadas às APIs, JSON, erros e fallback
@@ -98,13 +99,13 @@ AI_LOG.md             Registro de uso de IA
 ## Entrega
 
 - Código-fonte sem `js/env.js`.
-- `apresentacao.html` — slides.
+- `apresentacao.html` — slides navegáveis; `apresentacao.pdf` — slides em PDF.
 - `AI_LOG.md` — registro de uso de IA.
 
 Para gerar o zip sem a chave:
 
 ```bash
-zip -r ecomail-sprint2.zip index.html styles.css js assets README.md AI_LOG.md apresentacao.html -x "js/env.js"
+zip -r ecomail-sprint2.zip index.html styles.css js assets README.md AI_LOG.md apresentacao.html apresentacao.pdf -x "js/env.js"
 ```
 
 ## Autoria

@@ -4,7 +4,7 @@ Trabalho da Sprint II: assistente de IA em página única, em **HTML + JavaScrip
 
 ## Estado atual
 
-- Implementado: `index.html`, `styles.css`, `js/config.js`, `js/api.js`, `js/metrics.js`, `js/app.js`, `js/env.example.js`, `apresentacao.html`, `README.md`, `AI_LOG.md`.
+- Implementado: `index.html`, `styles.css`, `js/config.js`, `js/api.js`, `js/metrics.js`, `js/app.js`, `js/env.example.js`, `apresentacao.html`, `apresentacao.pdf`, `README.md`, `AI_LOG.md`.
 - Métricas: M1–M4 obrigatórias, M5 (diversidade lexical, intermediário) e M6 (Flesch PT, desafio). Trabalho **individual** de `Vitor Mazzonetto`; todas as métricas são dele.
 - **Contexto:** `js/config.js` contém o **EcoMail**, montado a partir do IS Canvas da Sprint I (`EcoMail-1.pptx`, fora do repositório). Confirme os detalhes com o PPTX antes de tratar como definitivo. `TERMOS_CHAVE` já está ajustado ao EcoMail.
 - **Modelos:** seletor Gemini com Gemma 4 26B (padrão), Gemma 4 31B, Gemini 3.5 Flash Lite e Gemini 3.1 Flash Lite. `js/api.js` tenta os demais automaticamente em 429, 5xx, 404 ou resposta vazia. Gemma devolve o raciocínio em uma parte com `thought: true`; ela é descartada.
@@ -59,6 +59,6 @@ O IS Canvas completo está em `EcoMail-1.pptx`, no diretório de Downloads do us
 - `js/api.js` — `fetch`, leitura do JSON de resposta, normalização de erros
 - `js/metrics.js` — apenas funções puras de métrica, sem DOM e sem dependências
 - `js/app.js` — eventos, estado, renderização
-- `apresentacao.html` — deck navegável; `AI_LOG.md` — registro de IA; `js/env.example.js` — template da chave local
+- `apresentacao.html` — deck navegável; `apresentacao.pdf` — versão em PDF; `AI_LOG.md` — registro de IA; `js/env.example.js` — template da chave local
 
 Manter `js/metrics.js` sem dependências é o que permite testar no console e alterar métricas durante a demonstração.
