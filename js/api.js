@@ -15,6 +15,20 @@ export class ErroApi extends Error {
   }
 }
 
+function erroFormato() {
+  return new ErroApi(
+    "A resposta da API veio em formato inesperado. Tente novamente.",
+    "formato"
+  );
+}
+
+function erroVazio() {
+  return new ErroApi(
+    "A API não retornou texto. A pergunta pode ter sido bloqueada pelos filtros do provedor.",
+    "vazia"
+  );
+}
+
 /**
  * Monta as mensagens enviadas ao modelo, incluindo as últimas
  * trocas da sessão para dar continuidade à conversa.
@@ -55,7 +69,7 @@ async function requisitar(url, opcoes, chave) {
     resposta = await fetch(url, opcoes);
   } catch (erro) {
     throw new ErroApi(
-      "Não foi possível conectar ao serviço. Verifique sua internet e tente novamente.",
+      "Não foi possível conectar ao serviço. Verifique sua internet e se o provedor permite chamadas do navegador.",
       "rede"
     );
   }
@@ -69,7 +83,7 @@ async function requisitar(url, opcoes, chave) {
         detalhe = dados.error.message;
       }
     } catch (erro) {
-      detalhe = "";
+      // Resposta de erro sem JSON: mantém a mensagem padrão do status.
     }
 
     detalhe = ocultarChave(detalhe, chave);
@@ -89,10 +103,7 @@ async function requisitar(url, opcoes, chave) {
     }
 
     if (resposta.status === 404) {
-      throw new ErroApi(
-        "O modelo selecionado não está disponível. Tentando outro modelo.",
-        "modelo"
-      );
+      throw new ErroApi("Modelo indisponível.", "modelo");
     }
 
     if (resposta.status >= 500) {
@@ -112,10 +123,7 @@ async function requisitar(url, opcoes, chave) {
   try {
     return await resposta.json();
   } catch (erro) {
-    throw new ErroApi(
-      "A resposta da API veio em formato inesperado. Tente novamente.",
-      "formato"
-    );
+    throw erroFormato();
   }
 }
 
@@ -150,36 +158,21 @@ async function chamarGemini({ chave, modelo, mensagens }) {
   );
 
   if (!dados || !Array.isArray(dados.candidates)) {
-    throw new ErroApi(
-      "A resposta da API veio em formato inesperado. Tente novamente.",
-      "formato"
-    );
+    throw erroFormato();
   }
 
-  let texto = "";
-
-  try {
-    const partes = dados.candidates[0]?.content?.parts;
-    texto = Array.isArray(partes)
-      ? partes
-          // Modelos Gemma podem devolver o raciocínio em uma parte com thought=true.
-          .filter((parte) => !parte.thought)
-          .map((parte) => parte.text || "")
-          .join("")
-          .trim()
-      : "";
-  } catch (erro) {
-    throw new ErroApi(
-      "A resposta da API veio em formato inesperado. Tente novamente.",
-      "formato"
-    );
-  }
+  const partes = dados.candidates[0]?.content?.parts;
+  const texto = Array.isArray(partes)
+    ? partes
+        // Modelos Gemma podem devolver o raciocínio em uma parte com thought=true.
+        .filter((parte) => parte && !parte.thought)
+        .map((parte) => parte.text || "")
+        .join("")
+        .trim()
+    : "";
 
   if (!texto) {
-    throw new ErroApi(
-      "A API não retornou texto. A pergunta pode ter sido bloqueada pelos filtros do provedor.",
-      "vazia"
-    );
+    throw erroVazio();
   }
 
   const uso = dados?.usageMetadata || {};
@@ -220,28 +213,13 @@ async function chamarOpenAICompativel({ chave, modelo, url, mensagens }) {
   );
 
   if (!dados || !Array.isArray(dados.choices)) {
-    throw new ErroApi(
-      "A resposta da API veio em formato inesperado. Tente novamente.",
-      "formato"
-    );
+    throw erroFormato();
   }
 
-  let texto = "";
-
-  try {
-    texto = (dados.choices[0]?.message?.content || "").trim();
-  } catch (erro) {
-    throw new ErroApi(
-      "A resposta da API veio em formato inesperado. Tente novamente.",
-      "formato"
-    );
-  }
+  const texto = (dados.choices[0]?.message?.content || "").trim();
 
   if (!texto) {
-    throw new ErroApi(
-      "A API não retornou texto. A pergunta pode ter sido bloqueada pelos filtros do provedor.",
-      "vazia"
-    );
+    throw erroVazio();
   }
 
   const uso = dados?.usage || {};
@@ -311,10 +289,7 @@ export async function perguntarAoModelo({
   const chaveLimpa = typeof chave === "string" ? chave.trim() : "";
 
   if (!chaveLimpa) {
-    throw new ErroApi(
-      "Informe a chave da API antes de enviar a pergunta.",
-      "chave"
-    );
+    throw new ErroApi("Chave ausente.", "chave");
   }
 
   const mensagens = montarMensagens(historico || [], pergunta);

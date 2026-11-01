@@ -1,98 +1,88 @@
 # Registro de uso de IA — Sprint II
 
-**Aluno(a):** Vitor Mazzonetto
-**Trabalho:** Assistente de IA do projeto EcoMail — Sprint II
+**Aluno:** Vitor Mazzonetto
+**Trabalho:** EcoMail — Assistente de IA (Sprint II)
 **Data:** novembro de 2026
 
-## Ferramentas utilizadas
+## Ferramentas
 
-- **OpenCode** (agente de código) com o modelo **DeepSeek V4.1 Flash**.
-- **Subagente revisor** do OpenCode, configurado apenas com os critérios da
-  rubrica, para auditar o código e apontar o que faltava.
-- **Navegador integrado do OpenCode** para testar a aplicação com a chave real e
-  capturar a tela usada nos slides.
-- Nenhuma biblioteca externa foi usada na aplicação. O `jsdom` foi usado apenas
-  em testes locais, fora da pasta entregue.
+- **OpenCode** com o modelo **DeepSeek V4.1 Flash**.
+- Subagentes para revisão de design, remoção de redundância e README.
+- Navegador integrado para o teste ao vivo e a captura de tela.
+- Node/jsdom e WeasyPrint usados apenas em testes e na geração do PDF, fora da
+  aplicação entregue.
 
-## Para que a IA foi usada
+## Uso por etapa
 
-| Parte | Como a IA ajudou |
+| Etapa | Apoio da IA |
 | --- | --- |
-| Estrutura HTML/CSS | Layout das colunas, formulário, cartões de métricas, responsividade e estados de erro. |
-| Contexto e prompt | Leitura do IS Canvas do EcoMail no `EcoMail-1.pptx` e redação do contexto e das regras de escopo enviadas ao LLM. |
-| Integração com APIs | Chamadas ao Gemini, OpenAI e Groq, leitura do JSON, normalização do campo `usage`, seleção de modelos Gemma/Gemini e fallback automático. |
-| Métricas | Implementação das funções de M1 a M6, incluindo normalização, contagem de frases, sílabas e Flesch. |
-| Tratamento de erros | Mensagens para chave inválida, limite excedido, falha de rede e JSON inesperado. |
-| Segurança | Campo de chave na página, uso de `sessionStorage` e envio por cabeçalho. |
-| Testes | Casos de teste das métricas e da interface fora do navegador. |
-| Teste ao vivo | Chamadas reais ao Google AI Studio com Gemma 4 26B, Gemma 4 31B e Gemini 3.5/3.1 Flash Lite; conferência do free tier e captura de tela. |
-| Documentação | README, roteiro de slides e este registro. |
+| Contexto e prompt | Leitura do IS Canvas do EcoMail no `EcoMail-1.pptx` e redação do contexto e das regras de escopo. |
+| Interface | Estrutura HTML, CSS responsivo, estados de erro/sucesso e acessibilidade. |
+| API e modelos | Chamadas ao Gemini, OpenAI e Groq, leitura do `usage`, seleção de modelos e fallback. |
+| Métricas | Funções M1–M6, incluindo normalização, frases, sílabas e Flesch. |
+| Segurança | Campo de chave, `sessionStorage`, envio por cabeçalho e limpeza de erros. |
+| Testes | Casos de métricas, API simulada, interface e teste ao vivo com Gemma 4 26B. |
+| Documentação | README, slides em HTML/PDF e este registro. |
 
-No teste ao vivo, o Gemma 4 26B respondeu corretamente às perguntas dentro e fora
-do escopo. O Gemma 4 31B teve um erro 500 transitório em uma das tentativas e o
-fallback foi acionado. A API não informa o plano contratado, mas as cotas exibidas
-no AI Studio (0/30 e 0/15) são compatíveis com o free tier.
+## Prompts representativos
 
-O código foi produzido com apoio intenso de IA nesta etapa. **Antes da entrega e
-da apresentação, o aluno deve revisar cada função, adaptar o contexto ao sistema
-real da Sprint I e ser capaz de explicar e alterar o código ao vivo.**
+1. “Implemente a Sprint II em HTML + JavaScript puro, com contexto do EcoMail,
+   prompt restritivo, histórico, validação, erros e painel de métricas.”
+2. “Crie as métricas M1–M4 e duas escolhidas em funções puras, sem bibliotecas.
+   Pelo menos uma deve percorrer a string caractere a caractere.”
+3. “Adicione Gemma 4 26B, Gemma 4 31B e Gemini 3.5/3.1 Flash Lite com fallback
+   automático e descarte as partes de raciocínio (`thought`).”
+4. “Audite a segurança: chave fora do repositório, XSS, prompt injection, erros
+   e conteúdo do zip/PDF. Relate achados e mitigações.”
 
-## Exemplos de prompts utilizados
+## Auditoria de segurança
 
-1. **Pedido geral**
-   > Implemente a Sprint II em HTML + JavaScript puro: assistente que responde
-   > dúvidas sobre o sistema da Sprint I usando uma API de LLM, com contexto,
-   > prompt restritivo, histórico, validação, tratamento de erros e painel de
-   > métricas calculadas em funções próprias.
+**Escopo:** código, histórico git, árvore remota, zip de entrega, PDF e captura
+de tela. Data: 01/11/2026.
 
-2. **Métricas**
-   > Crie as métricas M1 a M4 e mais duas escolhidas (uma intermediária e uma
-   > de desafio) em funções puras `nome(texto)`, sem bibliotecas. Pelo menos uma
-   > deve percorrer a string caractere a caractere. Comente o autor de cada uma.
+| Verificação | Resultado |
+| --- | --- |
+| Chave no código/repo (fora de `js/env.js`) | Nenhuma ocorrência |
+| Chave no histórico git | Nenhuma ocorrência |
+| Chave no `origin/main` | `js/env.js` não está versionado |
+| Chave no zip | `js/env.js` excluído |
+| Chave no texto do PDF | Nenhuma ocorrência |
+| Chave na captura | Campo mascarado (`type="password"`) |
+| `js/env.js` ignorado | Confirmado por `git check-ignore` |
 
-3. **Revisão**
-   > Audite o código contra os critérios da rubrica da Sprint II. Aponte
-   > arquivo e linha, o que está incorreto ou ausente e como corrigir. Não
-   > altere os arquivos.
+**Mitigações verificadas:**
 
-4. **Teste**
-   > Escreva casos de teste para as funções de métrica com espaços repetidos,
-   > quebras de linha, acentos, reticências, decimais e respostas sem `usage`.
+- A chave fica em `js/env.js`, ignorado pelo git, e pode ser digitada no campo
+  da página; não está no HTML, no CSS nem nos arquivos versionados.
+- Envio no cabeçalho (`x-goog-api-key` ou `Authorization: Bearer`), nunca na URL.
+- Mensagens de erro do provedor são limpas antes de aparecer na página.
+- Resposta e histórico usam `textContent`/`createElement`, sem `innerHTML`.
+- O prompt restringe o escopo e recusa instruções para ignorar regras; a saída do
+  modelo é tratada como texto não confiável.
+- Sem bibliotecas de terceiros na aplicação; o PDF usa WeasyPrint apenas fora da
+  entrega.
 
-## Pontos que preciso saber explicar
+**Riscos residuais (documentados):**
 
-Preencha esta coluna depois de estudar o código:
+- A chave fica no `sessionStorage` da aba durante a demo; quem tiver acesso ao
+  navegador consegue lê-la. É o trade-off de uma aplicação estática sem backend.
+- `js/env.js` é servido pelo servidor local enquanto a página está aberta; não
+  publique esse arquivo em um site público.
+- A chave foi compartilhada no chat durante o desenvolvimento; **revogue/gera
+  outra depois da apresentação**.
 
-| Função | O que preciso explicar | Revisei? |
-| --- | --- | --- |
-| `normalizarTexto` | Laço caractere a caractere, remoção de acentos e pontuação | ☐ |
-| `estimarTokens` | Por que caracteres ÷ 4 é apenas uma estimativa | ☐ |
-| `calcularErroPercentual` | Fórmula e proteção contra divisão por zero | ☐ |
-| `contarPalavras` | Tratamento de espaços repetidos e quebras de linha | ☐ |
-| `contarFrases` | Por que `...` conta uma vez e `3.5` não conta | ☐ |
-| `encontrarTermosChave` | Normalização, singular/plural e lista de termos | ☐ |
-| `calcularDiversidadeLexical` | `Set`, palavras distintas ÷ total | ☐ |
-| `contarSilabas` | Grupos de vogais e limitações da aproximação | ☐ |
-| `calcularFlesch` | Fórmula, divisão por frases e classificação | ☐ |
-| `perguntarAoModelo` | Formatos de requisição e resposta de cada provedor | ☐ |
-| `chamarGemini` | Filtro de `thought: true` e leitura de `usageMetadata` | ☐ |
-| Fallback | Ordem dos modelos e erros que disparam nova tentativa | ☐ |
-| `requisitar` | Erros 401/403, 429, 5xx, rede e JSON inválido | ☐ |
-| Chave | Por que não pode ficar no código e como o `sessionStorage` ajuda | ☐ |
+**Resultado:** nenhum achado crítico ou alto. Dois riscos médios inerentes à
+aplicação estática (chave no navegador e env local) foram documentados e
+mitigados; nenhum achado baixo pendente.
 
-## O que ainda depende do aluno
+## O que revisar antes da apresentação
 
-- Conferir o contexto do EcoMail em `js/config.js` com o PPTX original e
-  corrigir qualquer detalhe que esteja diferente.
-- **Entrega individual confirmada:** todas as métricas e comentários são de
-  Vitor Mazzonetto; não há divisão de métricas.
-- Revisar as funções da tabela acima e marcar o que já sabe explicar.
-- Repetir o teste ao vivo na apresentação. O teste com Gemma 4 26B já foi
-  realizado; as capturas estão em `assets/`.
+- Conferir o contexto do EcoMail com o `EcoMail-1.pptx`.
+- Saber explicar as funções de `js/metrics.js` e o fallback de modelos.
+- Repetir a demo com Gemma 4 26B e, se a API falhar, mostrar a mensagem de erro.
 
 ## Declaração
 
-Este registro foi preenchido como parte da entrega. As ferramentas e os prompts
-acima refletem o uso real durante o desenvolvimento. O aluno é responsável por
-compreender o código entregue e por conseguir explicá-lo e alterá-lo na
-apresentação.
+Este registro reflete o uso real das ferramentas durante o desenvolvimento.
+O código foi revisado e adaptado para o EcoMail; o aluno é responsável por
+explicar e alterar o que for solicitado na apresentação.

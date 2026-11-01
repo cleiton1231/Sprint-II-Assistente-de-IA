@@ -49,6 +49,7 @@
                 placeholder="Cole sua chave aqui"
                 autocomplete="off"
                 spellcheck="false"
+                aria-describedby="ajudaChave"
               />
               <button id="btnSalvarChave" class="botao secundario" type="button">
                 Salvar
@@ -65,6 +66,7 @@
             rows="4"
             maxlength="500"
             placeholder="Ex.: Quem é o público-alvo? Como funciona a classificação? O sistema inventa prazos?"
+            aria-describedby="contadorCaracteres"
           ></textarea>
           <div class="acoes-formulario">
             <span id="contadorCaracteres" class="contador">0/500</span>
@@ -76,14 +78,19 @@
 
         <p id="status" class="status info" role="status" aria-live="polite"></p>
 
-        <article id="resposta" class="cartao resposta" hidden>
-          <h2>Resposta do assistente</h2>
+        <article
+          id="resposta"
+          class="cartao resposta"
+          aria-labelledby="titulo-resposta"
+          hidden
+        >
+          <h3 id="titulo-resposta">Resposta do assistente</h3>
           <p id="textoResposta"></p>
         </article>
 
-        <section class="cartao historico" aria-labelledby="titulo-historico">
+        <section class="cartao" aria-labelledby="titulo-historico">
           <div class="titulo-com-acao">
-            <h2 id="titulo-historico">Histórico da sessão</h2>
+            <h3 id="titulo-historico">Histórico da sessão</h3>
             <span class="legenda">mais recente primeiro</span>
           </div>
           <div id="listaHistorico">
@@ -105,8 +112,8 @@
         </div>
 
         <p class="nota">
-          Métricas calculadas em JavaScript puro a partir do texto da pergunta e
-          da resposta. M1 usa o campo <code>usage</code> da API.
+          Métricas da última resposta. M1 usa <code>usage</code> ou
+          <code>usageMetadata</code>, conforme o provedor.
         </p>
       </aside>
     </main>

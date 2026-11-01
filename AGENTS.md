@@ -4,9 +4,8 @@ Trabalho da Sprint II: assistente de IA em página única, em **HTML + JavaScrip
 
 ## Estado atual
 
-- Implementado: `index.html`, `styles.css`, `js/config.js`, `js/api.js`, `js/metrics.js`, `js/app.js`, `js/env.example.js`, `apresentacao.html`, `apresentacao.pdf`, `README.md`, `AI_LOG.md`.
 - Métricas: M1–M4 obrigatórias, M5 (diversidade lexical, intermediário) e M6 (Flesch PT, desafio). Trabalho **individual** de `Vitor Mazzonetto`; todas as métricas são dele.
-- **Contexto:** `js/config.js` contém o **EcoMail**, montado a partir do IS Canvas da Sprint I (`EcoMail-1.pptx`, fora do repositório). Confirme os detalhes com o PPTX antes de tratar como definitivo. `TERMOS_CHAVE` já está ajustado ao EcoMail.
+- **Contexto:** `js/config.js` contém o **EcoMail**, montado a partir do IS Canvas da Sprint I (`EcoMail-1.pptx`, fora do repositório). Confirme os detalhes com o PPTX; se ele não estiver disponível, peça o Canvas ao usuário e não invente dados. `TERMOS_CHAVE` já está ajustado ao EcoMail.
 - **Modelos:** seletor Gemini com Gemma 4 26B (padrão), Gemma 4 31B, Gemini 3.5 Flash Lite e Gemini 3.1 Flash Lite. `js/api.js` tenta os demais automaticamente em 429, 5xx, 404 ou resposta vazia. Gemma devolve o raciocínio em uma parte com `thought: true`; ela é descartada.
 - Testes de métricas/API/UI foram feitos com Node e jsdom **fora do repositório**. Se precisar repetir, use `/tmp/opencode`; não crie `package.json` nem `node_modules` na entrega.
 - Teste ao vivo com a chave do AI Studio já foi feito com Gemma 4 26B; a captura está em `assets/aplicacao-slide.png`.
@@ -25,8 +24,7 @@ Trabalho da Sprint II: assistente de IA em página única, em **HTML + JavaScrip
 - **Nunca escreva a chave de API** no código, no HTML, em comentários, em um `.env` versionado ou no zip de entrega. A página deve ter um campo para a chave; mantenha-a apenas em memória (ou `sessionStorage`) e envie em cabeçalho, não na query string. Oculte-a de mensagens de erro e logs do console.
 - **Cada métrica é uma função própria** `nome(texto)` que retorna o valor calculado. Nada de cálculo de métrica embutido no código de renderização/DOM.
 - **Pelo menos uma métrica de cada aluno deve percorrer a string caractere a caractere** com um laço `for` explícito — sem atalho de `split`/regex nessa métrica.
-- **Comente o autor** acima de cada função de métrica (`// Autor: ...`) e mantenha a divisão de métricas por aluno, já que a nota é individual.
-- **Regra de dupla (não se aplica):** a entrega é individual. Se isso mudar, cada integrante implementa 2 métricas escolhidas diferentes e pelo menos uma intermediária/desafio.
+- **Comente o autor** acima de cada função de métrica (`// Autor: ...`); a nota é individual.
 - **M1 deve exibir três valores** lado a lado: tokens estimados (caracteres ÷ 4), tokens reais vindos da API e o erro percentual. Mostre `n/d` em vez de inventar um valor real quando a resposta não tiver `usage`.
 - **M4** precisa de uma lista explícita de termos do projeto no código; exiba a quantidade e quais termos apareceram.
 - **O registro de uso de IA é um entregável** (`AI_LOG.md`): anote ferramentas usadas, em quais partes ajudaram e prompts representativos. Acrescente ao arquivo quando a sessão adicionar código relevante.
@@ -46,10 +44,6 @@ Trabalho da Sprint II: assistente de IA em página única, em **HTML + JavaScrip
 - Gemini: tokens reais em `usageMetadata.promptTokenCount` / `candidatesTokenCount`; envie a chave no cabeçalho `x-goog-api-key`.
 - OpenAI / Groq: tokens reais em `usage.prompt_tokens` / `completion_tokens`; `Authorization: Bearer`.
 - O erro percentual deve proteger contra divisão por zero ou por token real ausente.
-
-## Não existem artefatos da Sprint I aqui
-
-O IS Canvas completo está em `EcoMail-1.pptx`, no diretório de Downloads do usuário, fora deste repositório. O `CONTEXTO_PROJETO` em `js/config.js` foi montado a partir dele. Se o PPTX não estiver disponível, peça o Canvas/PDF ao usuário antes de inventar detalhes; não crie números, prazos ou funcionalidades.
 
 ## Estrutura atual
 

@@ -7,7 +7,6 @@
 
 // ------------------------------------------------------------
 // Normalização (apoio para as demais métricas)
-// Nível: intermediário
 // Autor: Vitor Mazzonetto
 // Remove acentos, pontuação e espaços repetidos, usando um laço
 // caractere a caractere.

@@ -73,6 +73,11 @@ function formatarPercentual(valor) {
   }).format(valor)}%`;
 }
 
+function totalDeTokens(uso) {
+  if (!uso) return 0;
+  return uso.total > 0 ? uso.total : uso.entrada + uso.saida;
+}
+
 function mostrarStatus(mensagem, tipo) {
   elementos.status.textContent = mensagem;
   elementos.status.className = `status ${tipo || "info"}`;
@@ -212,6 +217,7 @@ function definirCarregando(carregando) {
   elementos.btnEnviar.textContent = carregando ? "Consultando..." : "Perguntar";
   elementos.inputPergunta.disabled = carregando;
   elementos.inputChave.disabled = carregando;
+  elementos.btnSalvarChave.disabled = carregando;
   elementos.selectProvedor.disabled = carregando;
   elementos.selectModelo.disabled = carregando;
   elementos.btnNovaConversa.disabled = carregando;
@@ -232,8 +238,7 @@ async function aoEnviar(evento) {
     return;
   }
 
-  const chave =
-    elementos.inputChave.value.trim() || carregarChave(estado.provedor);
+  const chave = elementos.inputChave.value.trim();
 
   if (!chave) {
     mostrarStatus("Informe a chave da API antes de enviar.", "erro");
@@ -338,8 +343,7 @@ function renderizarHistorico() {
     );
 
     if (item.uso) {
-      const tokens =
-        item.uso.total > 0 ? item.uso.total : item.uso.entrada + item.uso.saida;
+      const tokens = totalDeTokens(item.uso);
 
       bloco.append(
         criar(
@@ -358,10 +362,7 @@ function atualizarResumoSessao() {
   let tokens = 0;
 
   for (let i = 0; i < estado.historico.length; i++) {
-    const uso = estado.historico[i].uso;
-    if (uso) {
-      tokens += uso.total > 0 ? uso.total : uso.entrada + uso.saida;
-    }
+    tokens += totalDeTokens(estado.historico[i].uso);
   }
 
   const perguntas = estado.historico.length;
@@ -406,7 +407,7 @@ function criarCartao(codigo, titulo, valor, detalhes) {
 }
 
 function criarCartaoTokens(estimativaEntrada, estimativaSaida, uso) {
-  const cartao = criar("article", "metrica metrica-tokens");
+  const cartao = criar("article", "metrica");
   const topo = criar("div", "metrica-topo");
 
   topo.append(
@@ -517,12 +518,9 @@ function exibirMetricas(pergunta, resultado) {
     criarCartaoTokens(estimativaEntrada, estimativaSaida, resultado.uso),
     criarCartao(
       "M2",
-      "Palavras (pergunta / resposta)",
-      `${formatarNumero(palavrasResposta)} na resposta`,
-      [
-        ["Pergunta", formatarNumero(palavrasPergunta)],
-        ["Resposta", formatarNumero(palavrasResposta)],
-      ]
+      "Palavras da resposta",
+      `${formatarNumero(palavrasResposta)} palavras`,
+      [["Pergunta", formatarNumero(palavrasPergunta)]]
     ),
     criarCartao(
       "M3",
